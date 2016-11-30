@@ -870,7 +870,7 @@ float2 SMAADecodeDiagBilinearAccess(float2 e) {
 }
 
 float4 SMAADecodeDiagBilinearAccess(float4 e) {
-    e._rigidbody = e._rigidbody * abs(5.0 * e.rb - 5.0 * 0.75);
+    e.rb = e.rb * abs(5.0 * e.rb - 5.0 * 0.75);
     return round(e);
 }
 
