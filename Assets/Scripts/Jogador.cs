@@ -174,7 +174,8 @@ public class Jogador : MonoBehaviour {
 			);
 		}
 		//Se estiver no chao
-		if (Physics.BoxCast(new Vector3(transform.localPosition.x, transform.position.y * 1.1f, transform.localPosition.z), Vector3.zero, new Vector3(-0.25f,-5,-0.25f), out hit,Quaternion.identity,1.5f, 1 >> 0)){
+		if (Physics.BoxCast(new Vector3(transform.localPosition.x, transform.position.y + 0.1f, transform.localPosition.z), Vector3.zero, new Vector3(-0.25f,-5,-0.25f), out hit,Quaternion.identity,1.5f, 1 >> 0)){
+			print("1");
 			if (hit.transform.gameObject.isStatic) {
 				jogadorNoChao = true;
 				_animator.ResetTrigger("NoAr");
