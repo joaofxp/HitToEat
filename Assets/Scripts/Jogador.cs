@@ -201,7 +201,7 @@ public class Jogador : MonoBehaviour {
 			puloPodePular = false;
 		}
 		//Detectar se ha um player em cima
-		if (Physics.BoxCast(new Vector3(transform.localPosition.x, transform.position.y * 2, transform.localPosition.z), Vector3.zero, new Vector3(0.25f,5,0.25f), out hit,Quaternion.identity,2f)){
+		if (Physics.BoxCast(new Vector3(transform.localPosition.x, transform.position.y + 0.1f, transform.localPosition.z), Vector3.zero, new Vector3(0.25f,5,0.25f), out hit,Quaternion.identity,2f)){
 			//Se o jogador esta em cima de um jogador, pular e fazer o outro se abaixar
 			//Debug.Log(hit.collider);
 			if (hit.transform.tag == "Player" && !_animator.GetBool("LevandoPisada") && hit.transform.gameObject != this.gameObject && hit.collider is CapsuleCollider) {
