@@ -146,7 +146,9 @@ public class GameController : MonoBehaviour {
         {
             yield return new WaitForSeconds(laserEsperaDisparo);
             int i = Random.Range(0, lasersLista.Length);
-            StartCoroutine(lasersLista[i].GetComponent<Laser>().DispararLaser(laserTempo));
+			if (!lasersLista[i].GetComponent<Laser>().Linha.enabled) {
+				StartCoroutine(lasersLista[i].GetComponent<Laser>().DispararLaser(laserTempo));
+			}
             yield return new WaitForSeconds(1 * Time.deltaTime);
             StartCoroutine(LaserLigar());
         }

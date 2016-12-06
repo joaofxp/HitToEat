@@ -10,7 +10,7 @@ public class Laser : MonoBehaviour {
 	public float endWidth;
 	public float multiplicadorWidth;
 	public float alphaLaser;
-	LineRenderer Linha; //Laser
+	public LineRenderer Linha; //Laser
 
 	void Start () 
 	{
@@ -77,7 +77,6 @@ public class Laser : MonoBehaviour {
 						endWidth = startWidth;
 					}
 				}
-
 				if (Physics.Raycast (ray, out hit, 50))
 				{
 					Linha.SetPosition (1, hit.point); //Laser para ao colidir com algo
@@ -94,12 +93,13 @@ public class Laser : MonoBehaviour {
 				yield return null;
 				tempoLaser -= 1 * Time.deltaTime;
 			}
-			danoAtivado = false;
-			alphaLaser = 0;
-			startWidth = 0;
-			endWidth = startWidth;
-			Linha.enabled = false;
 		}
+
+		danoAtivado = false;
+		alphaLaser = 0;
+		startWidth = 0;
+		endWidth = startWidth;
+		Linha.enabled = false;
 //		GameController.singleton.StartCoroutine(GameController.singleton.LaserLigar());
 	}
 }

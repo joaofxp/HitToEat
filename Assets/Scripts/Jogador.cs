@@ -33,7 +33,7 @@ public class Jogador : MonoBehaviour {
 	//Pulo
 	public  float 	  puloForca = 7f;
 	[HideInInspector]
-	public  float 	  puloForcaInicial = 1f;
+	public  float 	  puloForcaInicial = 6f;
 	[HideInInspector]
 	public	bool	  puloPulando = false;
 	[HideInInspector]
@@ -174,31 +174,29 @@ public class Jogador : MonoBehaviour {
 			);
 		}
 		//Se estiver no chao
-		if (Physics.BoxCast(new Vector3(transform.localPosition.x, transform.position.y + 0.1f, transform.localPosition.z), Vector3.zero, new Vector3(-0.25f,-5,-0.25f), out hit,Quaternion.identity,1.5f, 1 >> 0)){
-			print("1");
-			if (hit.transform.gameObject.isStatic) {
+		if (Physics.BoxCast(new Vector3(transform.localPosition.x, transform.position.y + 0.1f, transform.localPosition.z), Vector3.zero, new Vector3(-0.25f,-5,-0.25f), out hit,Quaternion.identity,.75f, 1 >> 0)){
+			if (hit.transform.gameObject.isStatic) 
+			{
 				jogadorNoChao = true;
 				_animator.ResetTrigger("NoAr");
 			}
 			//Se posso pular
-			if (Input.GetAxisRaw(axisJogadorPulo) > 0 && jogadorNoChao && !_animator.GetCurrentAnimatorStateInfo(0).IsName("Dash") && !_animator.GetBool("Pular") && !puloIntervalo)
+			if (Input.GetAxisRaw(axisJogadorPulo) > 0 && jogadorNoChao && !_animator.GetCurrentAnimatorStateInfo(0).IsName("Dash") && !_animator.GetBool("Pular") && !puloIntervalo && puloPodePular)
 			{
 				//Adiciona a forca para cima com o modo impulso, dando mais realismo ao pulo
-				puloPodePular = false;
+//				puloPodePular = false;
+
 				jogadorNoChao = false;
 				_rigidbody.AddRelativeForce (Vector3.up * puloForca, ForceMode.Impulse);
 				_animator.SetBool("Pular",true);
 				StartCoroutine(PularIntervalo());
-			} else if (!puloIntervalo){
-				//se eu estiver no chao e nao estiver no intervalo
-				puloPodePular = true;
 			}
 		} else //Se estou no ar
 		{
 			_animator.SetTrigger("NoAr");
 			_animator.SetBool("Pular",false);
 			jogadorNoChao = false;
-			puloPodePular = false;
+//			puloPodePular = false;
 		}
 		//Detectar se ha um player em cima
 		if (Physics.BoxCast(new Vector3(transform.localPosition.x, transform.position.y + 0.1f, transform.localPosition.z), Vector3.zero, new Vector3(0.25f,5,0.25f), out hit,Quaternion.identity,2f)){
@@ -225,6 +223,7 @@ public class Jogador : MonoBehaviour {
 		}
         //Movimentar o personagem na direcaoMovimento apertada
 		transform.Translate(direcaoMovimento, Space.World);
+//		print(puloPodePular);
 	}
 
 	void LateUpdate()
@@ -265,8 +264,19 @@ public class Jogador : MonoBehaviour {
 				//Verificar se acertou um jogador ou um objeto movivel e esta socando
 				if (col.tag == "Player" && !col.GetComponent<Jogador>().jogadorProtecaoRespawn || col.tag == "Movivel")
 				{
+
+//					if(other.transform.name == "SocoDetector"){
+//						if(other.transform.parent.gameObject.GetComponent<Jogador>().socoEstaSocando == true){
+//							DestroyObject();
+//						}
+//					}
+						
 					if (socoEstaSocando == true)
 					{
+						if (col.GetComponent<ParapeitoQuebrarSoco>() != null) 
+						{
+							col.GetComponent<ParapeitoQuebrarSoco>().ParapeitoDestruir();
+						}
 						col.GetComponent<Rigidbody>().AddForce (transform.forward * socoForca * socoCarregado);
 						if (col.tag == "Player") {
 							if (!col.GetComponent<Jogador>()._animator.GetBool("LevarSoco")) {
@@ -329,15 +339,18 @@ public class Jogador : MonoBehaviour {
 	/// <returns>The intervalo.</returns>
 	private IEnumerator PularIntervalo()
 	{
-		StopCoroutine(PularIntervalo());
-		yield return new WaitForSeconds (1);
-		do {
-			puloIntervalo = true;
-			yield return new WaitForSeconds(1 * Time.deltaTime);
-		} while (!jogadorNoChao);
-			
-		yield return new WaitForSeconds(puloPularIntervalo);
-		puloIntervalo = false;
+		if (!puloIntervalo) {
+			StopCoroutine(PularIntervalo());
+			yield return new WaitForSeconds (1);
+			do {
+				puloIntervalo = true;
+				puloPodePular = false;
+				yield return new WaitForSeconds(1 * Time.deltaTime);
+			} while (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Idle") && Input.GetAxisRaw(axisJogadorPulo) != 0);
+			yield return new WaitForSeconds(puloPularIntervalo);
+			puloIntervalo = false;
+			puloPodePular = true;
+		}
 	}
 	/// <summary>
 	/// Reduz a velocidade do jogador ao levar uma pisada na cabeca
