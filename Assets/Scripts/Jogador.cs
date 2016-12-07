@@ -112,9 +112,20 @@ public class Jogador : MonoBehaviour {
 
 	void FixedUpdate()
 	{
+		//variavel para guardar as informacoes do que foi acertado
+		RaycastHit hit = new RaycastHit();
 		if (!movimentoPode) {
+			if (Physics.BoxCast(new Vector3(transform.localPosition.x, transform.position.y + 0.1f, transform.localPosition.z), Vector3.zero, new Vector3(-0.25f,-5,-0.25f), out hit,Quaternion.identity,1 , 1 >> 0)){
+				if (hit.transform.gameObject.isStatic)
+				{
+					jogadorNoChao = true;
+					_animator.ResetTrigger("NoAr");
+				}
+			}
 			return;
 		}
+
+
 		//Movimentacao e soco do jogador
 		if (Input.GetAxisRaw (axisJogadorSocoBotao) != 0 && socoPodeSocar && !socoCoroutine)
 		{
@@ -162,8 +173,6 @@ public class Jogador : MonoBehaviour {
 		{
 			_animator.ResetTrigger("Correndo");
 		}
-		//variavel para guardar as informacoes do que foi acertado
-		RaycastHit hit = new RaycastHit();
 		//Rotacao do personagem na direcaoMovimento que foi apertada
 		if (direcaoMovimento != Vector3.zero && !rolamentoTravar) 
 		{
@@ -174,8 +183,8 @@ public class Jogador : MonoBehaviour {
 			);
 		}
 		//Se estiver no chao
-		if (Physics.BoxCast(new Vector3(transform.localPosition.x, transform.position.y + 0.1f, transform.localPosition.z), Vector3.zero, new Vector3(-0.25f,-5,-0.25f), out hit,Quaternion.identity,.75f, 1 >> 0)){
-			if (hit.transform.gameObject.isStatic) 
+		if (Physics.BoxCast(new Vector3(transform.localPosition.x, transform.position.y + 0.1f, transform.localPosition.z), Vector3.zero, new Vector3(-0.25f,-5,-0.25f), out hit,Quaternion.identity,1 , 1 >> 0)){
+			if (hit.transform.gameObject.isStatic)
 			{
 				jogadorNoChao = true;
 				_animator.ResetTrigger("NoAr");
@@ -287,6 +296,13 @@ public class Jogador : MonoBehaviour {
 					}
 				}
 			}
+		}
+	}
+	//Colisores
+	void OnCollisionEnter (Collision other)
+	{
+		if (other.transform.tag == "Movivel" && rolamentoTravar && other.transform.GetComponent<ParapeitoQuebrarSoco>() != null) {
+			other.transform.GetComponent<ParapeitoQuebrarSoco>().ParapeitoDestruir();
 		}
 	}
 	//Coroutines
