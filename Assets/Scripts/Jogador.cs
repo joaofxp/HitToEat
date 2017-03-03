@@ -116,7 +116,7 @@ public class Jogador : MonoBehaviour {
 		RaycastHit hit = new RaycastHit();
 		if (!movimentoPode) {
 			if (Physics.BoxCast(new Vector3(transform.localPosition.x, transform.position.y + 0.1f, transform.localPosition.z), Vector3.zero, new Vector3(-0.25f,-5,-0.25f), out hit,Quaternion.identity,1 , 1 >> 0)){
-				if (hit.transform.gameObject.isStatic)
+				if (hit.transform.gameObject.isStatic || hit.transform.tag == "Movivel")
 				{
 					jogadorNoChao = true;
 					_animator.ResetTrigger("NoAr");
@@ -184,7 +184,7 @@ public class Jogador : MonoBehaviour {
 		}
 		//Se estiver no chao
 		if (Physics.BoxCast(new Vector3(transform.localPosition.x, transform.position.y + 0.1f, transform.localPosition.z), Vector3.zero, new Vector3(-0.25f,-5,-0.25f), out hit,Quaternion.identity,1 , 1 >> 0)){
-			if (hit.transform.gameObject.isStatic)
+			if (hit.transform.gameObject.isStatic  || hit.transform.tag == "Movivel")
 			{
 				jogadorNoChao = true;
 				_animator.ResetTrigger("NoAr");
