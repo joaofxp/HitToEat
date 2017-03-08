@@ -113,7 +113,7 @@ public class GameController : MonoBehaviour {
     {
         //Debug.Log("CHECK");
         ChecarJogadores();
-        if (SceneManager.GetActiveScene().name == "CenaLevelCozinha" || SceneManager.GetActiveScene().name == "BanheiroLevel")
+        if (SceneManager.GetActiveScene().name == "CenaLevelCozinha" || SceneManager.GetActiveScene().name == "CenaLevelBanheiro")
         {
             lasersLista = GameObject.FindGameObjectsWithTag("Laser");
             //StartCoroutine(CriarNovoPowerUp());
@@ -142,7 +142,7 @@ public class GameController : MonoBehaviour {
 	//COROUTINES
 	public IEnumerator LaserLigar()
 	{
-        if (SceneManager.GetActiveScene().name == "CenaLevelCozinha" || SceneManager.GetActiveScene().name == "BanheiroLevel")
+        if (SceneManager.GetActiveScene().name == "CenaLevelCozinha" || SceneManager.GetActiveScene().name == "CenaLevelBanheiro")
         {
             yield return new WaitForSeconds(laserEsperaDisparo);
             int i = Random.Range(0, lasersLista.Length);
