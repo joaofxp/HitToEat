@@ -36,9 +36,9 @@ public class Jogador : MonoBehaviour {
 	public  float 	  puloForcaInicial = 6f;
 	[HideInInspector]
 	public	bool	  puloPulando = false;
-	[HideInInspector]
+//	[HideInInspector]
 	public 	bool	  puloPodePular = false;
-	private bool	  puloIntervalo = false;
+	public bool	  puloIntervalo = false;
 	public  float	  puloPularIntervalo = 0.3f;
 	//Soco
 	public  float	  socoForca = 500f;
@@ -124,8 +124,6 @@ public class Jogador : MonoBehaviour {
 			}
 			return;
 		}
-
-
 		//Movimentacao e soco do jogador
 		if (Input.GetAxisRaw (axisJogadorSocoBotao) != 0 && socoPodeSocar && !socoCoroutine)
 		{
@@ -183,7 +181,7 @@ public class Jogador : MonoBehaviour {
 			);
 		}
 		//Se estiver no chao
-		if (Physics.BoxCast(new Vector3(transform.localPosition.x, transform.position.y + 0.1f, transform.localPosition.z), Vector3.zero, new Vector3(-0.25f,-5,-0.25f), out hit,Quaternion.identity,1 , 1 >> 0)){
+		if (Physics.BoxCast(new Vector3(transform.localPosition.x, transform.position.y + 0.1f, transform.localPosition.z), Vector3.zero, new Vector3(-0.25f,-.1f,-0.25f), out hit,Quaternion.identity,1 , 1 >> 0)){
 			if (hit.transform.gameObject.isStatic  || hit.transform.tag == "Movivel")
 			{
 				jogadorNoChao = true;
@@ -193,8 +191,6 @@ public class Jogador : MonoBehaviour {
 			if (Input.GetAxisRaw(axisJogadorPulo) > 0 && jogadorNoChao && !_animator.GetCurrentAnimatorStateInfo(0).IsName("Dash") && !_animator.GetBool("Pular") && !puloIntervalo && puloPodePular)
 			{
 				//Adiciona a forca para cima com o modo impulso, dando mais realismo ao pulo
-//				puloPodePular = false;
-
 				jogadorNoChao = false;
 				_rigidbody.AddRelativeForce (Vector3.up * puloForca, ForceMode.Impulse);
 				_animator.SetBool("Pular",true);
@@ -205,19 +201,18 @@ public class Jogador : MonoBehaviour {
 			_animator.SetTrigger("NoAr");
 			_animator.SetBool("Pular",false);
 			jogadorNoChao = false;
-//			puloPodePular = false;
 		}
 		//Detectar se ha um player em cima
-		if (Physics.BoxCast(new Vector3(transform.localPosition.x, transform.position.y + 0.1f, transform.localPosition.z), Vector3.zero, new Vector3(0.25f,5,0.25f), out hit,Quaternion.identity,2f)){
-			//Se o jogador esta em cima de um jogador, pular e fazer o outro se abaixar
-			//Debug.Log(hit.collider);
-			if (hit.transform.tag == "Player" && !_animator.GetBool("LevandoPisada") && hit.transform.gameObject != this.gameObject && hit.collider is CapsuleCollider) {
-				StartCoroutine(LevouPisada());
-				_animator.SetBool("LevandoPisada", true);
-				hit.rigidbody.AddRelativeForce (Vector3.up * puloForca, ForceMode.Impulse);
-				hit.rigidbody.AddRelativeForce (Vector3.forward * puloForca, ForceMode.Impulse);
-			}
-		}
+//		if (Physics.BoxCast(new Vector3(transform.localPosition.x, transform.position.y + 0.1f, transform.localPosition.z), Vector3.zero, new Vector3(0.25f,5,0.25f), out hit,Quaternion.identity,2f)){
+//			//Se o jogador esta em cima de um jogador, pular e fazer o outro se abaixar
+//			//Debug.Log(hit.collider);
+//			if (hit.transform.tag == "Player" && !_animator.GetBool("LevandoPisada") && hit.transform.gameObject != this.gameObject && hit.collider is CapsuleCollider) {
+//				StartCoroutine(LevouPisada());
+//				_animator.SetBool("LevandoPisada", true);
+//				hit.rigidbody.AddRelativeForce (Vector3.up * puloForca, ForceMode.Impulse);
+//				hit.rigidbody.AddRelativeForce (Vector3.forward * puloForca, ForceMode.Impulse);
+//			}
+//		}
 		//Verificar se o jogador esta dando o dash
 		if (rolamentoTravar)
 		{
@@ -356,7 +351,7 @@ public class Jogador : MonoBehaviour {
 	private IEnumerator PularIntervalo()
 	{
 		if (!puloIntervalo) {
-			StopCoroutine(PularIntervalo());
+//			StopCoroutine(PularIntervalo());
 			yield return new WaitForSeconds (1);
 			do {
 				puloIntervalo = true;
