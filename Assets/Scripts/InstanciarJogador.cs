@@ -56,7 +56,7 @@ public class InstanciarJogador : MonoBehaviour
             JogadorInstanciado.GetComponent<Jogador>().axisJogadorHorizontal = gameController.Jogadores_INPUTS[gameController.idJogadoresSelecionados[i]][1];
             JogadorInstanciado.GetComponent<Jogador>().axisJogadorPulo = gameController.Jogadores_INPUTS[gameController.idJogadoresSelecionados[i]][2];
             JogadorInstanciado.GetComponent<Jogador>().axisJogadorSocoBotao = gameController.Jogadores_INPUTS[gameController.idJogadoresSelecionados[i]][3];
-            JogadorInstanciado.GetComponent<Jogador>().axisJogadorRolarBotao = gameController.Jogadores_INPUTS[gameController.idJogadoresSelecionados[i]][4];
+            JogadorInstanciado.GetComponent<Jogador>().axisJogadorRolaBotao = gameController.Jogadores_INPUTS[gameController.idJogadoresSelecionados[i]][4];
 
         }
     }
